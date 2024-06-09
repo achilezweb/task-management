@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\V1\TaskController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -39,4 +39,9 @@ Route::post('/sanctum/token', function (Request $request) {
     return $user->createToken($request->device_name)->plainTextToken;
 });
 
-Route::apiResource('tasks', TaskController::class);
+Route::middleware('auth:sanctum')->prefix('v1')->group(function (){
+    // Route::apiResource('posts', PostController::class);
+    Route::apiResource('tasks', TaskController::class);
+  });
+
+  Route::apiResource('tasks', TaskController::class);
